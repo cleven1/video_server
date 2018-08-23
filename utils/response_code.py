@@ -12,6 +12,7 @@ class RET:
     USERERR           = '4104'
     ROLEERR           = '4105'
     PWDERR            = '4106'
+    VERIFYERR         = '4107'
     REQERR            = '4201'
     IPERR             = '4202'
     THIRDERR          = '4301'
@@ -30,6 +31,7 @@ err_map = {
     RET.PARAMERR      : u'参数错误',
     RET.USERERR       : u'用户不存在或未激活',
     RET.ROLEERR       : u'用户身份错误',
+    RET.VERIFYERR     : u'验证码错误',
     RET.PWDERR        : u'密码错误',
     RET.REQERR        : u'非法请求或请求次数受限',
     RET.IPERR         : u'ip受限',

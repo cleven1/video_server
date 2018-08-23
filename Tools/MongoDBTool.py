@@ -1,8 +1,10 @@
 #coding=utf-8
 import uuid
 import logging
+import random
 from bson.objectid import ObjectId
 from utils.common import requife_logined
+from utils.session import Session
 
 class MongoTool:
 
@@ -178,3 +180,73 @@ class MongoTool:
             video_list.append(data)
 
         return video_list
+
+    # 生产6-8位用户id
+    def generate_gid(self):
+        gids = []
+        for number in range(100000, 10000000):
+            gids.append(number)
+        for gid in gids:
+            index0 = random.randint(0, len(gids) - 1)
+            index1 = len(gids) - 1
+            tmp = gids[index0]
+            gids[index0] = gids[index1]
+            gids[index1] = tmp
+        return gids.pop()
+
+    def user_register(self,user_name,user_mobile,user_pwd,user_avatar,user_gender):
+        '''用户注册'''
+        user_collection = self.db.user
+
+        # 查询手机号有没有注册过
+        try:
+            cursor = user_collection.findOne({'user_mobile':user_mobile})
+        except Exception as e:
+            logging.error(e)
+
+        # 判断手机号是否已经注册过
+        if len(cursor['user_mobile']) > 0:
+            return 1
+
+        # 没有注册,插入数据
+        data = {
+            "user_name": user_name,
+            "user_mobile": user_mobile,
+            "user_pwd":user_pwd,
+            "user_avatar":user_avatar,
+            "user_gender":user_gender, # 0：女 1：男
+            "id": str(self.generate_gid())
+        }
+
+        try:
+            user_collection.insert_one(data)
+        except Exception as e:
+            logging.error(e)
+            print '插入失败'
+            return -1
+
+        return data
+
+
+    def user_login(self,user_mobile,user_pwd):
+        '''用户登录'''
+        user_collection = self.db.user
+
+        try:
+            cursor = user_collection.findOne({"user_mobile":user_mobile,"user_pwd":user_pwd})
+        except Exception as e:
+            logging.error(e)
+            return -1
+
+        data = {
+            "name": cursor['user_name'],
+            "mobile": cursor['user_mobile'],
+            "password": cursor['user_pwd'],
+            "avatarUrl": cursor['user_avatar'],
+            "gender": cursor['user_gender'],  # 0：女 1：男
+            "id": cursor['id']
+        }
+        return data
+
+
+

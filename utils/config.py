@@ -11,13 +11,13 @@ setting = {
 
 # mongodb
 mongo_options = dict(
-    host='47.74.178.206',
+    host='127.0.0.1',
     port=27017
 )
 
 # redis
 redis_options = dict(
-    host='47.74.178.20',
+    host='127.0.0.1',
     port=6379
 )
 

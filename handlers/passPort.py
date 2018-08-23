@@ -3,6 +3,7 @@
 import logging
 import hashlib
 import os
+from Tools.MongoDBTool import MongoTool
 
 from utils.response_code import RET
 from utils.contants import *
@@ -27,6 +28,9 @@ class RegisterHandler(BaseHandler):
 
     def post(self):
 
+        name = self.json_args.get('name')
+        avatar = self.json_args.get('avatar')
+        gender = int(self.json_args.get('gender','1').encode('utf-8'))
         mobile = self.json_args.get('mobile')
         sms_code = self.json_args.get('sms_code')
         password = self.json_args.get('pwd')
@@ -39,32 +43,36 @@ class RegisterHandler(BaseHandler):
             logging.error(e)
             
         if real_code != str(sms_code):
-            return self.write(dict(errno=2,errmsg='验证码错误'))
+            return self.write(dict(errno=RET.VERIFYERR,errmsg='验证码错误'))
 
         # 密码加密
         password = hashlib.sha256(PASS_WORD_HASH_KEY + password).hexdigest()
 
-        try:
-            # sql =
+        mongo = MongoTool(self.db)
 
-            res = self.db.execute('insert into cl_user_profile(up_name,up_mobile,up_password) '
-                                  'values(%(name)s,%(mobile)s,%(password)s)',
-                                  name=mobile,mobile=mobile,password=password)
+        result = mongo.user_register(name,mobile,password,avatar,gender)
 
-        except Exception as e:
-            logging.error(e)
-            return self.write(dict(error=RET.DATAEXIST,errmsg='手机号已注册'))
-
+        # 保存到session中
         try:
             self.session = Session(self)
-            self.session.data['user_id'] = res
-            self.session.data['name'] = mobile
-            self.session.data['mobile'] = mobile
+            self.session.data['user_id'] = result['id']
+            self.session.data['user_name'] = result['user_name']
+            self.session.data['user_mobile'] = result['user_mobile']
+            self.session.data['user_pwd'] = result['user_pwd']
+            self.session.data['user_avatar'] = result['user_avatar']
+            self.session.data['user_gender'] = result['user_gender']
             self.session.save()
         except Exception as e:
             logging.error(e)
+            return self.write(dict(errno=RET.SESSIONERR,errmsg='保存session 错误'))
 
-        self.write(dict(error=RET.OK,errmsg='ok'))
+        #-1 注册失败 1：手机号已经注册 0 注册成功
+        if result == -1:
+            return self.write(dict(errno=RET.DBERR,errmsg='注册失败'))
+        elif result == 1:
+            return self.write(dict(errno=RET.DATAEXIST,errmsg='手机号已经被注册'))
+        else:
+            self.write(dict(errno=RET.OK,errmsg='ok'))
 
 
 #  登录
@@ -78,33 +86,31 @@ class LoginHandler(BaseHandler):
         if not all([mobile,password]):
             return self.write(dict(RET.PARAMERR,errmsg='参数错误'))
 
-        res = None
-        try:
-            # select up_user_id,up_name,up_password from cl_user_profile where up_mobile=18909565563;
-            res = self.db.get('select up_user_id,up_name,up_password from cl_user_profile where up_mobile=%(m)s',m=mobile)
-        except Exception as e:
-            logging.error(e)
+        # 加密密码
+        password = hashlib.sha256(PASS_WORD_HASH_KEY + password).hexdigest
 
-        if not res:
-            return self.write(dict(error=RET.PARAMERR,errmsg='手机号或密码错误'))
+        mongo = MongoTool(self.db)
 
-        password = hashlib.sha256(PASS_WORD_HASH_KEY+password).hexdigest()
+        result = mongo.user_login(mobile,password)
 
-        if res and res['up_password'] == unicode(password):
+        if result == -1:
+            return self.write(dict(error=RET.PARAMERR, errmsg='手机号或密码错误'))
+        else:
+            # 保存到session中
             try:
                 self.session = Session(self)
-                self.session.data['user_id'] = res['up_user_id']
-                self.session.data['name'] = res['up_name']
-                self.session.data['mobile'] = mobile
+                self.session.data['user_id'] = result['id']
+                self.session.data['user_name'] = result['user_name']
+                self.session.data['user_mobile'] = result['user_mobile']
+                self.session.data['user_pwd'] = result['user_pwd']
+                self.session.data['user_avatar'] = result['user_avatar']
+                self.session.data['user_gender'] = result['user_gender']
                 self.session.save()
-
             except Exception as e:
                 logging.error(e)
+                return self.write(dict(errno=RET.SESSIONERR, errmsg='保存session 错误'))
 
-            return self.write(dict(error=RET.OK,errmsg='ok'))
-
-        else:
-            self.write(dict(error=RET.PARAMERR,errmsg='手机号或密码错误```'))
+            return self.write(dict(error=RET.OK, errmsg='ok'))
 
 
 # 检查用户登录状态
