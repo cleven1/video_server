@@ -11,6 +11,7 @@ from utils.contants import *
 from utils.response_code import RET
 from utils.common import requife_logined
 from bson.objectid import ObjectId
+from Tools.MongoDBTool import MongoTool
 
 # 列表数据
 class VideoInfoHandler(BaseHandler):
@@ -18,57 +19,69 @@ class VideoInfoHandler(BaseHandler):
     def get(self):
 
         offset_id = self.get_argument('id','0')
-        ispullup = int(self.get_argument('ispullup',0).encode('utf-8'))
-        video_category = int(self.get_argument('category',0).encode("utf-8"))
-	limit_count = int(self.get_argument('limit_count',20).encode('utf-8'))
-	print '查看参数' 
-	print offset_id
-	print type(offset_id)
-	print ispullup
-	print type(ispullup)
+        ispullup = int(self.get_argument('ispullup','0').encode('utf-8'))
+        video_category = int(self.get_argument('category','0').encode("utf-8"))
+        limit_count = int(self.get_argument('limit_count','20').encode('utf-8'))
 
-        try:
-            # 切换到指定数据库
-            db = self.db.XVideo
+        # 创建数据库工具类
+        mongo = MongoTool(self.db)
 
-            # 获取集合
-            collection = db.video
+        # 返回查询结果
+        result = mongo.get_video_list(offset_id,video_category,ispullup,limit_count)
 
-            if offset_id == '0':
-                cursor = collection.find({"category":video_category}).limit(limit_count)
-		print '加载数据'
-            elif ispullup == 1: # 上拉
-                cursor = collection.find({'_id': {'$gt': ObjectId(offset_id)},'category':video_category}).limit(limit_count)
-            else: # 下拉
-                cursor = collection.find({'_id': {'$lt': ObjectId(offset_id)},'category':video_category}).limit(limit_count)
-
-        except Exception as e:
-            logging.error(e)
-            return self.write(dict(errno=RET.DBERR, errmsg='dbError'))
-
-
-        video_list = []
-        for r in cursor:
-            data = {
-                'title': r['video_title'],
-                'imageUrl': r['video_image'],
-                'category': r['category'],
-                'videoUrl': r['video_url'],
-                'size': r['video_size'],
-                'duration': r['video_duration'],
-                'id': str(r['_id']),
-            }
-            video_list.append(data)
-
-        self.write(dict(errno=RET.OK, errmsg='ok', data=video_list))
+        if result == -1:
+            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+        else:
+            self.write(dict(errno=RET.OK, errmsg='ok', data=result))
 
 
 # 添加收藏
 class AddVideoCollectHandler(BaseHandler):
 
     @requife_logined
-    def get(self):
+    def post(self):
         user_id = self.session.data['user_id']
+        video_id = self.json_args('video_id','0')
+
+
+        if video_id == '0':
+            return self.write(dict(errno=RET.DATAERR,errmsg='video id error'))
+
+        # 创建数据库工具类
+        mongo = MongoTool(self.db)
+
+        # 返回查询结果
+        result = mongo.add_collect_data(video_id,user_id)
+
+        if result == -1:
+            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+        else:
+            self.write(dict(errno=RET.OK, errmsg='ok'))
+
+
+
+# 取消收藏
+class cancelMyCollectVideoHandler(BaseHandler):
+
+    @requife_logined
+    def post(self):
+
+        user_id = self.session.data['user_id']
+        video_id = self.json_args.get('video_id')
+
+        if not video_id:
+            return self.write(dict(errno=RET.PARAMERR,errmsg='video_id empty'))
+
+        # 创建数据库工具类
+        mongo = MongoTool(self.db)
+
+        # 返回查询结果
+        result = mongo.delete_collect_data(video_id,user_id)
+
+        if result == -1:
+            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+        else:
+            self.write(dict(errno=RET.OK, errmsg='ok'))
 
 
 
@@ -79,3 +92,56 @@ class MyCollectVideoHandler(BaseHandler):
     def get(self):
 
         user_id = self.session.data['user_id']
+        offset_id = self.get_argument('id', '0')
+        ispullup = int(self.get_argument('ispullup', '0').encode('utf-8'))
+        limit_count = int(self.get_argument('limit_count', '20').encode('utf-8'))
+
+        # 创建数据库工具类
+        mongo = MongoTool(self.db)
+
+        # 返回查询结果
+        result = mongo.get_collect_list(user_id,offset_id,limit_count,ispullup)
+
+        if result == -1:
+            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+        else:
+            self.write(dict(errno=RET.OK, errmsg='ok', data=result))
+
+
+# 添加我看过的数据
+class add_look_video(BaseHandler):
+
+    @requife_logined
+    def post(self):
+
+        user_id = self.session.data["user_id"]
+        video_id = self.json_args.get('video_id')
+
+        mongo = MongoTool(self.db)
+
+        result = mongo.add_look_video(user_id,video_id)
+
+        if result == -1:
+            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+        else:
+            self.write(dict(errno=RET.OK, errmsg='ok'))
+
+# 获取我看过的数据
+class get_look_video(BaseHandler):
+
+    @requife_logined
+    def get(self):
+
+        user_id = self.session.data['user_id']
+        offset_id = self.get_argument('id', '0')
+        ispullup = int(self.get_argument('ispullup', '0').encode('utf-8'))
+        limit_count = int(self.get_argument('limit_count', '20').encode('utf-8'))
+
+        mongo = MongoTool(self.db)
+
+        result = mongo.get_look_video(user_id,offset_id,ispullup,limit_count)
+
+        if result == -1:
+            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+        else:
+            self.write(dict(errno=RET.OK, errmsg='ok', data=result))
