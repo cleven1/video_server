@@ -32,7 +32,7 @@ class VideoInfoHandler(BaseHandler):
         if result == -1:
             return self.write(dict(errno=RET.DBERR, errmsg='db error'))
         else:
-            self.write(dict(errno=RET.OK, errmsg='ok', data=result))
+            self.write(dict(error_code=RET.OK, error_msg='ok', data=result))
 
 
 # 添加收藏
@@ -45,7 +45,7 @@ class AddVideoCollectHandler(BaseHandler):
 
 
         if video_id == '0':
-            return self.write(dict(errno=RET.DATAERR,errmsg='video id error'))
+            return self.write(dict(error_code=RET.DATAERR,error_msg='video id error'))
 
         # 创建数据库工具类
         mongo = MongoTool(self.db)
@@ -54,9 +54,9 @@ class AddVideoCollectHandler(BaseHandler):
         result = mongo.add_collect_data(video_id,user_id)
 
         if result == -1:
-            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+            return self.write(dict(error_code=RET.DBERR, error_msg='db error'))
         else:
-            self.write(dict(errno=RET.OK, errmsg='ok'))
+            self.write(dict(error_code=RET.OK, error_msg='ok'))
 
 
 
@@ -70,7 +70,7 @@ class cancelMyCollectVideoHandler(BaseHandler):
         video_id = self.json_args.get('video_id')
 
         if not video_id:
-            return self.write(dict(errno=RET.PARAMERR,errmsg='video_id empty'))
+            return self.write(dict(error_code=RET.PARAMERR,error_msg='video_id empty'))
 
         # 创建数据库工具类
         mongo = MongoTool(self.db)
@@ -79,9 +79,9 @@ class cancelMyCollectVideoHandler(BaseHandler):
         result = mongo.delete_collect_data(video_id,user_id)
 
         if result == -1:
-            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+            return self.write(dict(error_code=RET.DBERR, error_msg='db error'))
         else:
-            self.write(dict(errno=RET.OK, errmsg='ok'))
+            self.write(dict(error_code=RET.OK, error_msg='ok'))
 
 
 
@@ -103,9 +103,9 @@ class MyCollectVideoHandler(BaseHandler):
         result = mongo.get_collect_list(user_id,offset_id,limit_count,ispullup)
 
         if result == -1:
-            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+            return self.write(dict(error_code=RET.DBERR, error_msg='db error'))
         else:
-            self.write(dict(errno=RET.OK, errmsg='ok', data=result))
+            self.write(dict(error_code=RET.OK, error_msg='ok', data=result))
 
 
 # 添加我看过的数据
@@ -122,9 +122,9 @@ class add_look_video(BaseHandler):
         result = mongo.add_look_video(user_id,video_id)
 
         if result == -1:
-            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+            return self.write(dict(error_code=RET.DBERR, error_msg='db error'))
         else:
-            self.write(dict(errno=RET.OK, errmsg='ok'))
+            self.write(dict(error_code=RET.OK, error_msg='ok'))
 
 # 获取我看过的数据
 class get_look_video(BaseHandler):
@@ -142,6 +142,6 @@ class get_look_video(BaseHandler):
         result = mongo.get_look_video(user_id,offset_id,ispullup,limit_count)
 
         if result == -1:
-            return self.write(dict(errno=RET.DBERR, errmsg='db error'))
+            return self.write(dict(error_code=RET.DBERR, error_msg='db error'))
         else:
-            self.write(dict(errno=RET.OK, errmsg='ok', data=result))
+            self.write(dict(error_code=RET.OK, error_msg='ok', data=result))

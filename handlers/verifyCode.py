@@ -27,14 +27,14 @@ class smsCodeHandler(BaseHandler):
 
         # 判断有没有值
         if not all((mobile)):
-            return self.write(dict(error=RET.PARAMERR,errmsg='参数不完整'))
+            return self.write(dict(error_code=RET.PARAMERR,error_msg='参数不完整'))
 
         # 判断手机号格式
         if len(mobile) != 11:
-            return self.write(dict(error=RET.PARAMERR,errmsg='手机号错误'))
+            return self.write(dict(error_code=RET.PARAMERR,error_msg='手机号错误'))
 
         if not re.match(r'^1[3|4|5|7|8][0-9]\d{4,8}$',mobile):
-            return self.write(dict(error=RET.PARAMERR,errmsg='手机号格式错误'))
+            return self.write(dict(error_code=RET.PARAMERR,error_msg='手机号格式错误'))
 
 
         print "-"*40
@@ -47,15 +47,15 @@ class smsCodeHandler(BaseHandler):
             self.redis.set('sms_code_%s'%mobile,sms_code,SMS_CODE_EXPRIES_SECONDS * 60)
         except Exception as e:
             logging.error(e)
-            return self.write(dict(error=RET.DBERR, errmsg='生产短信验证码错误'))
+            return self.write(dict(error_code=RET.DBERR, error_msg='生产短信验证码错误'))
 
         # 发送短信
         try:
             ccp.sendTemplateSMS(mobile,[sms_code,SMS_CODE_EXPRIES_SECONDS],1)
         except Exception as e:
             logging.error(e)
-            return self.write(dict(error=RET.THIRDERR, errmsg='发送短信验证码失败'))
+            return self.write(dict(error_code=RET.THIRDERR, error_msg='发送短信验证码失败'))
 
         # 返回成功
-        self.write(dict(errno=RET.OK,errmsg='ok'))
+        self.write(dict(error_code=RET.OK,error_msg='ok'))
 

@@ -8,10 +8,10 @@ from handlers import videoHandler
 
 handlers = [
     # (r'/',passPort.IndexHandler),
-    (r'/api/smscode',verifyCode.smsCodeHandler),
-    (r'/api/register',passPort.RegisterHandler),
-    (r'/api/login',passPort.LoginHandler),
-    (r'/api/checkloginstatus',passPort.CheckLoginHandler),
+    (r'/api/user/smscode',verifyCode.smsCodeHandler),
+    (r'/api/user/register',passPort.RegisterHandler),
+    (r'/api/user/login',passPort.LoginHandler),
+    (r'/api/user/checkloginstatus',passPort.CheckLoginHandler),
     (r'/api/video/info', videoHandler.VideoInfoHandler),
     (r'/api/video/addCollect',videoHandler.AddVideoCollectHandler),
     (r'/api/video/cancelCollect',videoHandler.cancelMyCollectVideoHandler),

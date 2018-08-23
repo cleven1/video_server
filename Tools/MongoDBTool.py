@@ -1,5 +1,6 @@
 #coding=utf-8
 import uuid
+import time
 import logging
 import random
 from bson.objectid import ObjectId
@@ -205,7 +206,7 @@ class MongoTool:
             logging.error(e)
 
         # 判断手机号是否已经注册过
-        if len(cursor['user_mobile']) > 0:
+        if cursor['user_mobile']:
             return 1
 
         # 没有注册,插入数据
@@ -215,7 +216,8 @@ class MongoTool:
             "user_pwd":user_pwd,
             "user_avatar":user_avatar,
             "user_gender":user_gender, # 0：女 1：男
-            "id": str(self.generate_gid())
+            "id": str(self.generate_gid()),
+            "register_time":str(time.time())
         }
 
         try:
