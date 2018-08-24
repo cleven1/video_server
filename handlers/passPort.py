@@ -34,6 +34,7 @@ class RegisterHandler(BaseHandler):
         mobile = self.json_args.get('mobile')
         sms_code = self.json_args.get('sms_code')
         password = self.json_args.get('pwd')
+        identifier = self.json_args.get('identifier')
 
         if not all([mobile,sms_code,password]):
             return self.write(dict(error_code=RET.PARAMERR,error_msg='参数错误'))
@@ -50,7 +51,7 @@ class RegisterHandler(BaseHandler):
 
         mongo = MongoTool(self.db)
 
-        result = mongo.user_register(name,mobile,password,avatar,gender)
+        result = mongo.user_register(name,mobile,password,avatar,gender,identifier)
 
         # 保存到session中
         try:
@@ -61,6 +62,7 @@ class RegisterHandler(BaseHandler):
             self.session.data['user_pwd'] = result['user_pwd']
             self.session.data['user_avatar'] = result['user_avatar']
             self.session.data['user_gender'] = result['user_gender']
+            self.session.data['identifier'] = result['identifier']
             self.session.save()
         except Exception as e:
             logging.error(e)
@@ -84,8 +86,13 @@ class LoginHandler(BaseHandler):
         password = self.json_args.get('pwd')
 
         if not all([mobile,password]):
-            return self.write(dict(error_code=RET.PARAMERR,error_msg='参数错误'))
+            mobile = self.get_argument('mobile')
+            password = self.get_argument('pwd')
+            if not all([mobile,password]):
+                return self.write(dict(error_code=RET.PARAMERR,error_msg='参数错误'))
 
+        print mobile
+        print password
         # 加密密码
         password = hashlib.sha256(PASS_WORD_HASH_KEY + password).hexdigest
 

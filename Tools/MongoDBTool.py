@@ -195,7 +195,7 @@ class MongoTool:
             gids[index1] = tmp
         return gids.pop()
 
-    def user_register(self,user_name,user_mobile,user_pwd,user_avatar,user_gender):
+    def user_register(self,user_name,user_mobile,user_pwd,user_avatar,user_gender,identifier):
         '''用户注册'''
         user_collection = self.db.user
 
@@ -207,6 +207,7 @@ class MongoTool:
 
         # 判断手机号是否已经注册过
         if cursor['user_mobile']:
+            print '手机号被注册'
             return 1
 
         # 没有注册,插入数据
@@ -217,7 +218,8 @@ class MongoTool:
             "user_avatar":user_avatar,
             "user_gender":user_gender, # 0：女 1：男
             "id": str(self.generate_gid()),
-            "register_time":str(time.time())
+            "register_time":str(time.time()),
+            "identifier":identifier
         }
 
         try:
@@ -238,8 +240,10 @@ class MongoTool:
             cursor = user_collection.findOne({"user_mobile":user_mobile,"user_pwd":user_pwd})
         except Exception as e:
             logging.error(e)
+            print "查询错误"
             return -1
 
+        print '查询成功'
         data = {
             "name": cursor['user_name'],
             "mobile": cursor['user_mobile'],

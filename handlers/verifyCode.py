@@ -23,10 +23,13 @@ class smsCodeHandler(BaseHandler):
 
     def post(self):
         # 获取参数
-        mobile = self.json_args.get('mobile')
-
+        # mobile = self.json_args.get('mobile')
+        # print mobile
+        mobile = self.get_argument('mobile')
+        print mobile
         # 判断有没有值
-        if not all((mobile)):
+        if not any(mobile):
+            print "mobile is empty"
             return self.write(dict(error_code=RET.PARAMERR,error_msg='参数不完整'))
 
         # 判断手机号格式
