@@ -11,6 +11,7 @@ handlers = [
     (r'/api/user/smscode',verifyCode.smsCodeHandler),
     (r'/api/user/register',passPort.RegisterHandler),
     (r'/api/user/login',passPort.LoginHandler),
+    (r'/api/user/logoff',passPort.LogOffHandler),
     (r'/api/user/checkloginstatus',passPort.CheckLoginHandler),
     (r'/api/video/info', videoHandler.VideoInfoHandler),
     (r'/api/video/addCollect',videoHandler.AddVideoCollectHandler),

@@ -31,6 +31,13 @@ class BaseHandler(RequestHandler):
     def write_error(self, status_code, **kwargs):
         pass
 
+    # 获取参数
+    def get_data(self,key,default=None):
+        value = self.json_args.get(key,default)
+        if not value:
+            value = self.get_argument(key,default)
+        return value
+
     def set_default_headers(self):
         self.set_header('Content-Type','application/json;charset=utf-8')
 

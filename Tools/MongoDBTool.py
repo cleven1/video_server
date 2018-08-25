@@ -116,7 +116,7 @@ class MongoTool:
             video_id = r['video_id']
             try:
                 video_collect = self.db.video
-                video = video_collect.findOne({'video_id':video_id})
+                video = video_collect.find_one({'video_id':video_id})
             except Exception as e:
                 logging.error(e)
                 return -1
@@ -201,12 +201,13 @@ class MongoTool:
 
         # 查询手机号有没有注册过
         try:
-            cursor = user_collection.findOne({'user_mobile':user_mobile})
+            cursor = user_collection.find_one({'user_mobile':user_mobile})
         except Exception as e:
             logging.error(e)
 
+        print cursor
         # 判断手机号是否已经注册过
-        if cursor['user_mobile']:
+        if cursor and cursor['user_mobile']:
             print '手机号被注册'
             return 1
 
@@ -228,16 +229,27 @@ class MongoTool:
             logging.error(e)
             print '插入失败'
             return -1
-
+        print '注册成功'
         return data
 
+    def delete_user(self,user_id):
+        '''删除用户'''
+        user_collection = self.db.user
+
+        try:
+            cursor = user_collection.delete_one({'user_id':user_id})
+        except Exception as e:
+            logging.error(e)
+            return -1
+        return 0
 
     def user_login(self,user_mobile,user_pwd):
         '''用户登录'''
         user_collection = self.db.user
-
+        print '密码'
+        print user_pwd
         try:
-            cursor = user_collection.findOne({"user_mobile":user_mobile,"user_pwd":user_pwd})
+            cursor = user_collection.find_one({"user_mobile":user_mobile,"user_pwd":user_pwd})
         except Exception as e:
             logging.error(e)
             print "查询错误"

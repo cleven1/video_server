@@ -16,6 +16,7 @@ from Tools.MongoDBTool import MongoTool
 # 列表数据
 class VideoInfoHandler(BaseHandler):
 
+    @requife_logined
     def get(self):
 
         offset_id = self.get_argument('id','0')

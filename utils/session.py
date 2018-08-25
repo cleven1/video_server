@@ -17,6 +17,7 @@ class Session(object):
         if not self.session_id:
             # 用户第一次访问
             # 生成session——id
+            print '生成session id'
             self.session_id = uuid.uuid4().get_hex()
             self.data = {}
 
@@ -47,6 +48,7 @@ class Session(object):
 
         except Exception as e:
             logging.error(e)
+            print '保存redis 失败'
             raise Exception('save session failed')
         else:
             self.request_handler.set_secure_cookie('session_id',self.session_id)
