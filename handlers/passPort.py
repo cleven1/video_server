@@ -109,6 +109,8 @@ class LoginHandler(BaseHandler):
 
         if result == -1:
             return self.write(dict(error_code=RET.PARAMERR, error_msg='手机号或密码错误'))
+        elif result == 1:
+            return self.write(dict(error_code=RET.PARAMERR, error_msg='用户不存在'))
         else:
             print result
             # 保存到session中

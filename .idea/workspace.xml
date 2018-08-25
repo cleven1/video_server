@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bb51e444-dccf-4453-bc4b-ac64434ace24" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tools/MongoDBTool.py" afterPath="$PROJECT_DIR$/Tools/MongoDBTool.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/handlers/baseHandler.py" afterPath="$PROJECT_DIR$/handlers/baseHandler.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/handlers/passPort.py" afterPath="$PROJECT_DIR$/handlers/passPort.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/handlers/videoHandler.py" afterPath="$PROJECT_DIR$/handlers/videoHandler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/session.py" afterPath="$PROJECT_DIR$/utils/session.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/urls.py" afterPath="$PROJECT_DIR$/utils/urls.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/video_server$server.coverage" NAME="server Coverage Results" MODIFIED="1535170183581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
+    <SUITE FILE_PATH="coverage/video_server$server.coverage" NAME="server Coverage Results" MODIFIED="1535172241479" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/utils" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -51,8 +47,8 @@
       <file leaf-file-name="passPort.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/handlers/passPort.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="995">
-              <caret line="141" column="19" lean-forward="false" selection-start-line="141" selection-start-column="6" selection-end-line="141" selection-end-column="19" />
+            <state relative-caret-position="1259">
+              <caret line="114" column="24" lean-forward="true" selection-start-line="114" selection-start-column="24" selection-end-line="114" selection-end-column="24" />
               <folding>
                 <element signature="e#16#30#0" expanded="true" />
               </folding>
@@ -73,8 +69,8 @@
       <file leaf-file-name="MongoDBTool.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tools/MongoDBTool.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2662">
-              <caret line="121" column="25" lean-forward="true" selection-start-line="121" selection-start-column="25" selection-end-line="121" selection-end-column="25" />
+            <state relative-caret-position="1276">
+              <caret line="259" column="0" lean-forward="true" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
               <folding>
                 <element signature="e#14#25#0" expanded="true" />
               </folding>
@@ -125,9 +121,9 @@
         <option value="$PROJECT_DIR$/handlers/baseHandler.py" />
         <option value="$PROJECT_DIR$/utils/session.py" />
         <option value="$PROJECT_DIR$/handlers/videoHandler.py" />
-        <option value="$PROJECT_DIR$/handlers/passPort.py" />
         <option value="$PROJECT_DIR$/utils/urls.py" />
         <option value="$PROJECT_DIR$/Tools/MongoDBTool.py" />
+        <option value="$PROJECT_DIR$/handlers/passPort.py" />
       </list>
     </option>
   </component>
@@ -476,7 +472,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="52" width="1185" height="679" extended-state="5" />
+    <frame x="65" y="52" width="1185" height="679" extended-state="4" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23009624" sideWeight="0.49113923" order="0" side_tool="false" content_ui="combo" />
@@ -610,8 +606,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/handlers/passPort.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="995">
-          <caret line="141" column="19" lean-forward="false" selection-start-line="141" selection-start-column="6" selection-end-line="141" selection-end-column="19" />
+        <state relative-caret-position="1259">
+          <caret line="114" column="24" lean-forward="true" selection-start-line="114" selection-start-column="24" selection-end-line="114" selection-end-column="24" />
           <folding>
             <element signature="e#16#30#0" expanded="true" />
           </folding>
@@ -620,8 +616,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Tools/MongoDBTool.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2662">
-          <caret line="121" column="25" lean-forward="true" selection-start-line="121" selection-start-column="25" selection-end-line="121" selection-end-column="25" />
+        <state relative-caret-position="1276">
+          <caret line="259" column="0" lean-forward="true" selection-start-line="259" selection-start-column="0" selection-end-line="259" selection-end-column="0" />
           <folding>
             <element signature="e#14#25#0" expanded="true" />
           </folding>

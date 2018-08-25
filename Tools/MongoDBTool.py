@@ -254,6 +254,9 @@ class MongoTool:
             logging.error(e)
             print "查询错误"
             return -1
+        if cursor is None:
+            print '用户不存在'
+            return 1
 
         print '查询成功'
         data = {
