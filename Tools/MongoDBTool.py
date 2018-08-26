@@ -6,6 +6,7 @@ import random
 from bson.objectid import ObjectId
 from utils.common import requife_logined
 from utils.session import Session
+from utils.common import get_time_stamp
 
 class MongoTool:
 
@@ -219,7 +220,7 @@ class MongoTool:
             "user_avatar":user_avatar,
             "user_gender":user_gender, # 0：女 1：男
             "id": str(self.generate_gid()),
-            "register_time":str(time.time()),
+            "register_time":get_time_stamp(),
             "identifier":identifier
         }
 

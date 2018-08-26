@@ -5,6 +5,7 @@ sys.path.append(BASE_DIR)
 from handlers import passPort
 from handlers import verifyCode
 from handlers import videoHandler
+from handlers import UploadHandler
 
 handlers = [
     # (r'/',passPort.IndexHandler),
@@ -19,5 +20,6 @@ handlers = [
     (r'/api/video/collect', videoHandler.MyCollectVideoHandler),
     (r'/api/video/addLook',videoHandler.add_look_video),
     (r'/api/video/look',videoHandler.get_look_video),
+    (r'/api/upload',UploadHandler.UploadFile),
 
 ]

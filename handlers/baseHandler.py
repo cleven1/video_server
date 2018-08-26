@@ -4,6 +4,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+import time
 import json
 
 from tornado.web import RequestHandler,StaticFileHandler

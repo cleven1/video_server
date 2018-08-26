@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import time
 import functools
 from utils.response_code import RET
 
@@ -21,3 +22,9 @@ def requife_logined(func):
 
 
     return wrapper
+
+# 获取时间戳
+def get_time_stamp(self):
+    times = str(time.time()).split('.')
+    time_stamp = ''.join(times)
+    return time_stamp
